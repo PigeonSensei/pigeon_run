@@ -8,6 +8,7 @@
 #include <termios.h>
 
 #include "ftxui/component/container.hpp"
+#include "ftxui/component/checkbox.hpp"
 #include "ftxui/screen/string.hpp"
 #include "ftxui/screen/color.hpp"
 #include "pigeon_terminal/pigeon_terminal.h"
@@ -52,8 +53,12 @@ public:
 private:
     ros::Publisher publisher_motor_command_;
     pigeon_run::MotorCommand motor_command_;
-    int menu_number_ = 0;
     Pigeon_terminal pigeon_terminal_;
+
+    int menu_number_ = 0;
+    int state_mute_ = 0;
+    int state_join_ = 0;
+
 
 };
 #endif // MOTOR_DRIVER_TESTER_H

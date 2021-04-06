@@ -39,8 +39,8 @@ void Motor_driver_tester::DrawTUI()
   // -------- style 조건문 --------------
   auto style_0 = (menu_number_ == 0) ? color(ftxui::Color::Default) | ftxui::dim : color(ftxui::Color::Default);
   auto style_1 = (menu_number_ == 1) ? color(ftxui::Color::Default) | ftxui::dim : color(ftxui::Color::Default);
-//  auto style_2 = (menu_number_ == 2) ? color(ftxui::Color::Default) | ftxui::dim : color(ftxui::Color::Default);
-//  auto style_3 = (menu_number_ == 3) ? color(ftxui::Color::Default) | ftxui::dim : color(ftxui::Color::Default);
+  auto style_2 = (menu_number_ == 2) ? color(ftxui::Color::Default) | ftxui::dim : color(ftxui::Color::Default);
+  auto style_3 = (menu_number_ == 3) ? color(ftxui::Color::Default) | ftxui::dim : color(ftxui::Color::Default);
 //  auto style_4 = (menu_number_ == 4) ? color(ftxui::Color::Default) | ftxui::dim : color(ftxui::Color::Default);
 
   auto limit_style_0 = (gauge_command_L >= 1.0) ? (menu_number_ == 0) ? color(ftxui::Color::RedLight) | ftxui::dim : color(ftxui::Color::RedLight) : (menu_number_ == 0) ? color(ftxui::Color::Default) | ftxui::dim : color(ftxui::Color::Default);
@@ -55,11 +55,13 @@ void Motor_driver_tester::DrawTUI()
 //  auto negative_limit_style_3 = (cmd_vel_pub_.angular.x <= -1.0) ? (menu_number_ == 3) ? color(ftxui::Color::Red) | ftxui::dim : color(ftxui::Color::Red) : (menu_number_ == 3) ? color(ftxui::Color::Default) | ftxui::dim : color(ftxui::Color::Default);
 //  auto negative_limit_style_4 = (cmd_vel_pub_.angular.y <= -1.0) ? (menu_number_ == 4) ? color(ftxui::Color::Red) | ftxui::dim : color(ftxui::Color::Red) : (menu_number_ == 4) ? color(ftxui::Color::Default) | ftxui::dim : color(ftxui::Color::Default);
 
+//  ftxui::
+  ftxui::CheckBox checkbox[2];
   std::string reset_position;
 
   ftxui::Element Document =
   ftxui::vbox({
-       // -------- Top panel --------------
+       // -------- Top panel --------------ftxui::text(L"Mute ☐") | style_2,
       ftxui::hbox({
            ftxui::hbox({
               ftxui::text(L"Motor_driver_tester") | ftxui::bold | ftxui::center, ftxui::separator(),
@@ -104,18 +106,9 @@ void Motor_driver_tester::DrawTUI()
               }),
           }) | ftxui::bold, ftxui::separator(),
           ftxui::vbox({
-              ftxui::text(L"command_L  : "),
-              ftxui::text(L"command_R  : "),
+              state_mute_ == 0 ? ftxui::text(L"Mute ☐") | style_2 : ftxui::text(L"Mute ▣") | style_2 ,
+              state_join_ == 0 ? ftxui::text(L"Join ☐") | style_3 : ftxui::text(L"Join ▣") | style_3 ,
           }),
-//      ftxui::vbox({
-//          ftxui::hbox({
-//              ftxui::text(L"command_L  : "),
-//              ftxui::text(ftxui::to_wstring(std::to_string(100))),
-//          }),
-//          ftxui::hbox({
-//              ftxui::text(L"command_R  : "),
-//              ftxui::text(ftxui::to_wstring(std::to_string(100))),
-//          }),
       }) | ftxui::flex,
 
   });
@@ -152,11 +145,12 @@ int Motor_driver_tester::SetKey() // 키 입력 함수
 
   if(key_value_ == 122 | key_value_ == 90) ResetAllMotorCommand(); // INPUT Z
   if(key_value_ == 120 | key_value_ == 88) ResetAtMotorCommand(menu_number_); //INPUT X
+
   return 0;
 
 }
 
-void Motor_driver_tester::InputMotorCommand(int menu_number, int key_value) // 키 입력에 따른 cmd_vel 대입 함수
+void Motor_driver_tester::InputMotorCommand(int menu_number, int key_value) // 키 입력에 따른 대입 함수
 {
 //----------------- command_L -----------------//
   if(menu_number == 0)
@@ -192,24 +186,39 @@ void Motor_driver_tester::InputMotorCommand(int menu_number, int key_value) // �
     }
   }
 
+//----------------- Mute -----------------//
+  if(menu_number == 2)
+  {
+    if(key_value == 100 | key_value == 68) state_mute_ = 1;
+    if(key_value == 97 | key_value == 65) state_mute_ = 0;
+  }
+
+//----------------- Join -----------------//
+  if(menu_number == 3)
+  {
+    if(key_value == 100 | key_value == 68) state_join_ = 1;
+    if(key_value == 97 | key_value == 65) state_join_ = 0;
+  }
+
+
+
+
+
 }
-
-//void Pigeon_robot_steering::InputCmdVels(int cmd_vel_menu_number, double cmd_vel) // DrawTUI에 사용할 cmd_vel 대입 함수
-//{
-
-//}
 
 void Motor_driver_tester::ResetAtMotorCommand(int menu_number) // 현재 항목 motor_command 리셋 함수
 {
 //----------------- command_L -----------------//
-  if(menu_number == 0){
-    motor_command_.command_L = 0;
-  }
+  if(menu_number == 0) motor_command_.command_L = 0;
 
 //----------------- command_R -----------------//
-  if(menu_number == 1){
-    motor_command_.command_R = 0;
-  }
+  if(menu_number == 1) motor_command_.command_R = 0;
+
+//----------------- Mute -----------------//
+  if(menu_number == 2) state_mute_ = 0;
+
+//----------------- Join -----------------//
+  if(menu_number == 3) state_join_ = 0;
 }
 
 void Motor_driver_tester::ResetAllMotorCommand() // 모든 항목 motor_command 리셋 함수
