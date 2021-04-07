@@ -3,7 +3,7 @@
 
 #include <ros/ros.h>
 
-#include "pigeon_run/MotorCommand.h"
+#include "motor_driver_msgs/MotorCommand.h"
 
 #include <termios.h>
 
@@ -17,7 +17,7 @@ class Motor_driver_tester
 {
 public:
     Motor_driver_tester(ros::NodeHandle &n)
-      : publisher_motor_command_(n.advertise<pigeon_run::MotorCommand>("motor_command",1000))
+      : publisher_motor_command_(n.advertise<motor_driver_msgs::MotorCommand>("motor_command",1000))
        {
           // open run
           ROS_INFO("motor_driver_tester_node OPNE");
@@ -40,7 +40,7 @@ public:
 
     void ResetAllMotorCommand();
 
-    int UpdateMotorCommand_();
+    int DoJoin();
 
     int Publisher();
 
@@ -52,7 +52,7 @@ public:
 
 private:
     ros::Publisher publisher_motor_command_;
-    pigeon_run::MotorCommand motor_command_;
+    motor_driver_msgs::MotorCommand motor_command_;
     Pigeon_terminal pigeon_terminal_;
 
     int menu_number_ = 0;

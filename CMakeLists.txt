@@ -11,6 +11,7 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   message_generation
   std_msgs
+  motor_driver_msgs
 )
 
 find_package(Threads)
@@ -139,10 +140,10 @@ endif()
 endforeach()
 
 ## Generate messages in the 'msg' folder
-add_message_files(
-  FILES
-  MotorCommand.msg
-)
+#add_message_files(
+#  FILES
+#  MotorCommand.msg
+#)
 
 ## Generate services in the 'srv' folder
 # add_service_files(

@@ -41,30 +41,21 @@ void Motor_driver_tester::DrawTUI()
   auto style_1 = (menu_number_ == 1) ? color(ftxui::Color::Default) | ftxui::dim : color(ftxui::Color::Default);
   auto style_2 = (menu_number_ == 2) ? color(ftxui::Color::Default) | ftxui::dim : color(ftxui::Color::Default);
   auto style_3 = (menu_number_ == 3) ? color(ftxui::Color::Default) | ftxui::dim : color(ftxui::Color::Default);
-//  auto style_4 = (menu_number_ == 4) ? color(ftxui::Color::Default) | ftxui::dim : color(ftxui::Color::Default);
 
   auto limit_style_0 = (gauge_command_L >= 1.0) ? (menu_number_ == 0) ? color(ftxui::Color::RedLight) | ftxui::dim : color(ftxui::Color::RedLight) : (menu_number_ == 0) ? color(ftxui::Color::Default) | ftxui::dim : color(ftxui::Color::Default);
   auto limit_style_1 = (gauge_command_R >= 1.0) ? (menu_number_ == 1) ? color(ftxui::Color::RedLight) | ftxui::dim : color(ftxui::Color::RedLight) : (menu_number_ == 1) ? color(ftxui::Color::Default) | ftxui::dim : color(ftxui::Color::Default);
-//  auto limit_style_2 = (cmd_vel_pub_.linear.z >= 1.0) ? (menu_number_ == 2) ? color(ftxui::Color::RedLight) | ftxui::dim : color(ftxui::Color::RedLight) : (menu_number_ == 2) ? color(ftxui::Color::Default) | ftxui::dim : color(ftxui::Color::Default);
-//  auto limit_style_3 = (cmd_vel_pub_.angular.x >= 1.0) ? (menu_number_ == 3) ? color(ftxui::Color::RedLight) | ftxui::dim : color(ftxui::Color::RedLight) : (menu_number_ == 3) ? color(ftxui::Color::Default) | ftxui::dim : color(ftxui::Color::Default);
-//  auto limit_style_4 = (cmd_vel_pub_.angular.y >= 1.0) ? (menu_number_ == 4) ? color(ftxui::Color::RedLight) | ftxui::dim : color(ftxui::Color::RedLight) : (menu_number_ == 4) ? color(ftxui::Color::Default) | ftxui::dim : color(ftxui::Color::Default);
 
   auto negative_limit_style_0 = (negative_gauge_command_L <= -1.0) ? (menu_number_ == 0) ? color(ftxui::Color::Red) | ftxui::dim : color(ftxui::Color::Red) : (menu_number_ == 0) ? color(ftxui::Color::Default) | ftxui::dim : color(ftxui::Color::Default);
   auto negative_limit_style_1 = (negative_gauge_command_R <= -1.0) ? (menu_number_ == 1) ? color(ftxui::Color::Red) | ftxui::dim : color(ftxui::Color::Red) : (menu_number_ == 1) ? color(ftxui::Color::Default) | ftxui::dim : color(ftxui::Color::Default);
-//  auto negative_limit_style_2 = (cmd_vel_pub_.linear.z <= -1.0) ? (menu_number_ == 2) ? color(ftxui::Color::Red) | ftxui::dim : color(ftxui::Color::Red) : (menu_number_ == 2) ? color(ftxui::Color::Default) | ftxui::dim : color(ftxui::Color::Default);
-//  auto negative_limit_style_3 = (cmd_vel_pub_.angular.x <= -1.0) ? (menu_number_ == 3) ? color(ftxui::Color::Red) | ftxui::dim : color(ftxui::Color::Red) : (menu_number_ == 3) ? color(ftxui::Color::Default) | ftxui::dim : color(ftxui::Color::Default);
-//  auto negative_limit_style_4 = (cmd_vel_pub_.angular.y <= -1.0) ? (menu_number_ == 4) ? color(ftxui::Color::Red) | ftxui::dim : color(ftxui::Color::Red) : (menu_number_ == 4) ? color(ftxui::Color::Default) | ftxui::dim : color(ftxui::Color::Default);
 
-//  ftxui::
-  ftxui::CheckBox checkbox[2];
   std::string reset_position;
 
   ftxui::Element Document =
   ftxui::vbox({
-       // -------- Top panel --------------ftxui::text(L"Mute ☐") | style_2,
+       // -------- Top panel --------------
       ftxui::hbox({
            ftxui::hbox({
-              ftxui::text(L"Motor_driver_tester") | ftxui::bold | ftxui::center, ftxui::separator(),
+              ftxui::text(L"Motor Driver Tester") | ftxui::bold | ftxui::center, ftxui::separator(),
            }),
            ftxui::text(L"motor_command")| color(ftxui::Color::Red) | ftxui::center, ftxui::separator(),
            ftxui::text(L"ver 0.1")| ftxui::bold,
@@ -200,13 +191,9 @@ void Motor_driver_tester::InputMotorCommand(int menu_number, int key_value) // �
     if(key_value == 97 | key_value == 65) state_join_ = 0;
   }
 
-
-
-
-
 }
 
-void Motor_driver_tester::ResetAtMotorCommand(int menu_number) // 현재 항목 motor_command 리셋 함수
+void Motor_driver_tester::ResetAtMotorCommand(int menu_number) // 현재 항목 리셋 함수
 {
 //----------------- command_L -----------------//
   if(menu_number == 0) motor_command_.command_L = 0;
@@ -221,27 +208,49 @@ void Motor_driver_tester::ResetAtMotorCommand(int menu_number) // 현재 항목 
   if(menu_number == 3) state_join_ = 0;
 }
 
-void Motor_driver_tester::ResetAllMotorCommand() // 모든 항목 motor_command 리셋 함수
+void Motor_driver_tester::ResetAllMotorCommand() // 모든 항목 리셋 함수
 {
   for(int i=0;i<4;i++){
     ResetAtMotorCommand(i);
   }
 }
 
+int Motor_driver_tester::DoJoin()
+{
+
+  if(menu_number_ == 0) motor_command_.command_R = motor_command_.command_L;
+  if(menu_number_ == 1) motor_command_.command_L = motor_command_.command_R;
+
+  if(motor_command_.command_L != motor_command_.command_R)
+  {
+    if(abs(motor_command_.command_L) > abs(motor_command_.command_R)) motor_command_.command_L = motor_command_.command_R;
+    else if(abs(motor_command_.command_L) < abs(motor_command_.command_R)) motor_command_.command_R = motor_command_.command_L;
+    else if(abs(motor_command_.command_L) == abs(motor_command_.command_R)) motor_command_.command_R = motor_command_.command_L;
+  }
+
+  return 0;
+}
+
 int Motor_driver_tester::Publisher() // 토픽 퍼블리시 함수
 {
   publisher_motor_command_.publish(motor_command_);
-
   return 0;
-
 }
 
 void Motor_driver_tester::Spin() // 전체 흐름 제어 함수
 {
   DrawTUI();
   SetKey();
-  Publisher();
-//  pigeon_terminal_.ClearTerminal();
+
+  if(state_join_ == 1) DoJoin();
+
+  if(state_mute_ == 0) Publisher();
+  else if(state_mute_ == 1)
+  {
+    motor_command_.command_L = 0;
+    motor_command_.command_R = 0;
+    Publisher();
+  }
   return;
 }
 
@@ -251,14 +260,13 @@ void Motor_driver_tester::Exit() // 종료시 값 초기화 함수
   DrawTUI();
   Publisher();
   pigeon_terminal_.ClearTerminal();
-
 }
 
 int main(int argc, char **argv)
 {
   ros::init(argc, argv, "motor_driver_tester_node");
   ros::NodeHandle n;
-  ros::Rate loop_rate(30);
+  ros::Rate loop_rate(60);
 
   Motor_driver_tester motor_driver_tester(n);
 
