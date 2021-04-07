@@ -59,7 +59,7 @@ void Motor_driver_tester::DrawTUI()
            }),
            ftxui::text(L"motor_command")| color(ftxui::Color::Red) | ftxui::center, ftxui::separator(),
            ftxui::text(L"ver 0.1")| ftxui::bold,
-          // -------- cmd_vel Menu --------------
+          // -------- motor_command Menu --------------
       }),
       ftxui::separator(),
       ftxui::hbox({
@@ -84,9 +84,9 @@ void Motor_driver_tester::DrawTUI()
               ftxui::text(L"+"),
               }),
       }) | ftxui::flex, ftxui::separator(),
-      // -------- cmd_vel_info panel --------------
+      // -------- motor_command panel --------------
       ftxui::hbox({
-          ftxui::vbox({
+           ftxui::vbox({
               ftxui::hbox({
                   ftxui::text(L"command_L  : "),
                   ftxui::text(ftxui::to_wstring(std::to_string(motor_command_.command_L))),
@@ -95,8 +95,8 @@ void Motor_driver_tester::DrawTUI()
                   ftxui::text(L"command_R  : "),
                   ftxui::text(ftxui::to_wstring(std::to_string(motor_command_.command_R))),
               }),
-          }) | ftxui::bold, ftxui::separator(),
-          ftxui::vbox({
+           }) | ftxui::bold, ftxui::separator(),
+           ftxui::vbox({
               state_mute_ == 0 ? ftxui::text(L"Mute ☐") | style_2 : ftxui::text(L"Mute ▣") | style_2 ,
               state_join_ == 0 ? ftxui::text(L"Join ☐") | style_3 : ftxui::text(L"Join ▣") | style_3 ,
           }),
