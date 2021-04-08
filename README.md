@@ -9,7 +9,7 @@
 ### Run
 
 ```bash
-pigeon_run motor_driver_tester_node
+rosrun pigeon_run motor_driver_tester_node
 ```
 
 ### Published Topics
