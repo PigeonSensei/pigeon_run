@@ -5,6 +5,7 @@
 ### Dependency package
 
 - [motor_driver_msgs](https://github.com/PigeonSensei/pigeon_motor_driver/tree/master/motor_driver_msgs)
+- [FTXUI](https://github.com/ArthurSonzogni/FTXUI)
 
 ### Run
 
