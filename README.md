@@ -15,7 +15,7 @@ rosrun pigeon_run motor_driver_tester_node
 
 ### Published Topics
 
-- /motor_command (motor_driver_msgs/MotorCommand)
+- /motor_command ([motor_driver_msgs/MotorCommand](https://github.com/PigeonSensei/pigeon_motor_driver/blob/master/motor_driver_msgs/msg/MotorCommand.msg))
 
 ### Demo
 
@@ -31,4 +31,3 @@ at Reset value : X
 
 all Reset value : Z
 
-exit : ESC
