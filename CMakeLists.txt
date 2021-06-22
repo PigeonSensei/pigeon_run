@@ -24,17 +24,6 @@ FetchContent_Declare(ftxui
 
 FetchContent_MakeAvailable(ftxui)
 
-add_library(pigeon_terminal
-    include/pigeon_terminal/pigeon_terminal.h
-    src/pigeon_terminal/pigeon_terminal.cpp
-    )
-
-## Generate added messages and services with any dependencies listed here
-generate_messages(
-  DEPENDENCIES
-  std_msgs  # Or other packages containing msgs
-)
-
 ################################################
 ## Declare ROS dynamic reconfigure parameters ##
 ################################################
@@ -68,7 +57,6 @@ include_directories(
 
 add_executable(motor_driver_tester_node src/motor_driver_tester.cpp)
 target_link_libraries(motor_driver_tester_node
-  PRIVATE pigeon_terminal
   PRIVATE ftxui::screen
   PRIVATE ftxui::dom
   PRIVATE ftxui::component ${catkin_LIBRARIES})

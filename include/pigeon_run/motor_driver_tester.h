@@ -11,7 +11,6 @@
 #include "ftxui/component/checkbox.hpp"
 #include "ftxui/screen/string.hpp"
 #include "ftxui/screen/color.hpp"
-#include "pigeon_terminal/pigeon_terminal.h"
 
 class Motor_driver_tester
 {
@@ -19,26 +18,34 @@ public:
     Motor_driver_tester(ros::NodeHandle &n)
       : publisher_motor_command_(n.advertise<motor_driver_msgs::MotorCommand>("motor_command",1000))
        {
-          // open run
-          ROS_INFO("motor_driver_tester_node OPNE");
+         HideEcho(true);
+         ClearTerminal();
        }
        ~Motor_driver_tester()
        {
-          // close run
-          ROS_INFO("motor_driver_tester_node CLOSE");
+         HideEcho(false);
+         for(int i=0;i<4;i++)
+         {
+           ResetAtMotorCommand(i);
+         }
+         DrawTUI();
+         Publisher();
+         ClearTerminal();
        }
+
+    void HideEcho(bool value);
+
+    void ClearTerminal();
+
+    int ReturnInputKey();
 
     void DrawTUI();
 
-    int SetKey();
+    int GetInputKey();
 
-    void InputMotorCommand(int cmd_vel_menu_number, int key_input);
+    void InputMotorCommand(int menu_number, int key_input);
 
-    void InputCmdVels(int cmd_vel_menu_number, double cmd_vel);
-
-    void ResetAtMotorCommand(int cmd_vel_menu_number);
-
-    void ResetAllMotorCommand();
+    void ResetAtMotorCommand(int menu_number);
 
     int DoJoin();
 
@@ -46,18 +53,16 @@ public:
 
     void Spin();
 
-    void Exit();
-
-    int key_value_;
-
 private:
     ros::Publisher publisher_motor_command_;
     motor_driver_msgs::MotorCommand motor_command_;
-    Pigeon_terminal pigeon_terminal_;
 
     int menu_number_ = 0;
     int state_mute_ = 0;
     int state_join_ = 0;
+
+    struct termios org_term_;
+    struct termios new_term_;
 
 
 };
