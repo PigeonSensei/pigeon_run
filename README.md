@@ -16,7 +16,12 @@ rosrun pigeon_run motor_driver_tester_node
 
 ### Published Topics
 
-- /motor_command ([motor_driver_msgs/MotorCommand](https://github.com/PigeonSensei/pigeon_motor_driver/blob/master/motor_driver_msgs/msg/MotorCommand.msg))
+- motor_command ([motor_driver_msgs/MotorCommand](https://github.com/PigeonSensei/pigeon_motor_driver/blob/master/motor_driver_msgs/msg/MotorCommand.msg))
+
+### Subscribed Topics
+
+- encoder_count ([encoder_msgs/EncoderCount](https://github.com/PigeonSensei/pigeon_encoder_driver/blob/master/encoder_msgs/msg/EncoderCount.msg))
+
 
 ### Demo
 
