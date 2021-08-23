@@ -12,6 +12,8 @@ find_package(catkin REQUIRED COMPONENTS
   message_generation
   std_msgs
   motor_driver_msgs
+  gpio_encoder
+  encoder_msgs
 )
 
 include(FetchContent)
