@@ -29,12 +29,10 @@ public:
        ~Motor_driver_tester()
        {
          HideEcho(false);
-         for(int i=0;i<4;i++)
-         {
-           ResetAtMotorCommand(i);
-         }
+         ResetAllCommand();
          DrawTUI();
          Publisher();
+//         ros::spinOnce();
          ClearTerminal();
        }
 
@@ -50,9 +48,11 @@ public:
 
     int GetInputKey();
 
-    void InputMotorCommand(int menu_number, int key_input);
+    void InputCommand(int menu_number, int key_input);
 
-    void ResetAtMotorCommand(int menu_number);
+    void ResetAtCommand(int menu_number);
+
+    void ResetAllCommand();
 
     int DoJoin();
 
@@ -70,15 +70,16 @@ private:
     ros::Subscriber subscriber_encoder_count_;
     ros::ServiceClient service_client_reset_encoder_count_;
 
-
     motor_driver_msgs::MotorCommand motor_command_;
     encoder_msgs::EncoderCount encoder_count_;
     encoder_msgs::ResetEncoderCount reset_encoder_count_;
 
-    int menu_number_ = 0;
-    int state_mute_ = 0;
-    int state_join_ = 0;
-    int state_encoder_reset_ = 0;
+    int8_t menu_number_ = 0;
+    int8_t minimum_menu_number_ = 0;
+    int8_t maximum_menu_number_ = 4;
+    int8_t state_mute_ = 0;
+    int8_t state_join_ = 0;
+    int8_t state_encoder_reset_ = 0;
 
     struct termios org_term_;
     struct termios new_term_;

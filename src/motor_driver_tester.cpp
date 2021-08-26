@@ -50,7 +50,6 @@ int Motor_driver_tester::ReturnInputKey()
 
 void Motor_driver_tester::DrawTUI()
 {
-
   double gauge_command_L = 0.0;
   double gauge_command_R = 0.0;
   double negative_gauge_command_L = 1.0;
@@ -88,7 +87,6 @@ void Motor_driver_tester::DrawTUI()
   auto style_2 = (menu_number_ == 2) ? color(ftxui::Color::Default) | ftxui::dim : color(ftxui::Color::Default);
   auto style_3 = (menu_number_ == 3) ? color(ftxui::Color::Default) | ftxui::dim : color(ftxui::Color::Default);
   auto style_4 = (menu_number_ == 4) ? color(ftxui::Color::Default) | ftxui::dim : color(ftxui::Color::Default);
-
 
   auto limit_style_0 = (gauge_command_L >= 1.0) ? (menu_number_ == 0) ? color(ftxui::Color::RedLight) | ftxui::dim : color(ftxui::Color::RedLight) : (menu_number_ == 0) ? color(ftxui::Color::Default) | ftxui::dim : color(ftxui::Color::Default);
   auto limit_style_1 = (gauge_command_R >= 1.0) ? (menu_number_ == 1) ? color(ftxui::Color::RedLight) | ftxui::dim : color(ftxui::Color::RedLight) : (menu_number_ == 1) ? color(ftxui::Color::Default) | ftxui::dim : color(ftxui::Color::Default);
@@ -190,61 +188,51 @@ void Motor_driver_tester::DrawTUI()
 
 int Motor_driver_tester::GetInputKey() // 키 입력 함수
 {
-  int minimum_menu_number = 0;
-  int maximum_menu_number = 4;
-
   int key_value = ReturnInputKey();
 
   // INPUT W
-  if(key_value == 119 | key_value == 87){
-    menu_number_ = menu_number_ - 1;
-    if(menu_number_ < minimum_menu_number ) menu_number_ = minimum_menu_number;
+  if(key_value == 119 | key_value == 87)
+  {
+    menu_number_--;
+    if(menu_number_ < minimum_menu_number_ ) menu_number_ = minimum_menu_number_;
   }
 
   // INPUT S
   if(key_value == 115 | key_value == 83)
   {
-    menu_number_ = menu_number_ + 1;
-    if(menu_number_ > maximum_menu_number ) menu_number_ = maximum_menu_number;
+    menu_number_++;
+    if(menu_number_ > maximum_menu_number_ ) menu_number_ = maximum_menu_number_;
   }
 
   //INPUT D
-  if(key_value == 100 | key_value == 68) InputMotorCommand(menu_number_, key_value);
+  if(key_value == 100 | key_value == 68) InputCommand(menu_number_, key_value);
 
   //INPUT A
-  if(key_value == 97 | key_value == 65) InputMotorCommand(menu_number_, key_value);
+  if(key_value == 97 | key_value == 65) InputCommand(menu_number_, key_value);
 
   //INPUT X
-  if(key_value == 120 | key_value == 88) ResetAtMotorCommand(menu_number_);
+  if(key_value == 120 | key_value == 88) ResetAtCommand(menu_number_);
 
   //INPUT Z
-  if(key_value == 122 | key_value == 90)
-  {
-    for(int i=0;i<4;i++)
-    {
-      ResetAtMotorCommand(i);
-    }
-
-  }
-
+  if(key_value == 122 | key_value == 90) ResetAllCommand();
 
   return 0;
 
 }
 
-void Motor_driver_tester::InputMotorCommand(int menu_number, int key_value)
+void Motor_driver_tester::InputCommand(int menu_number, int key_value)
 {
 //----------------- command_L -----------------//
   if(menu_number == 0)
   {
     if(key_value == 100 | key_value == 68)
     {
-      motor_command_.command_L = motor_command_.command_L + 1;
+      motor_command_.command_L++;
       if(motor_command_.command_L > 100) motor_command_.command_L = 100;
     }
      if(key_value == 97 | key_value == 65 )
      {
-       motor_command_.command_L = motor_command_.command_L - 1;
+       motor_command_.command_L--;
        if(motor_command_.command_L < -100) motor_command_.command_L = -100;
      }
   }
@@ -254,13 +242,13 @@ void Motor_driver_tester::InputMotorCommand(int menu_number, int key_value)
   {
     if(key_value == 100 | key_value == 68)
     {
-      motor_command_.command_R = motor_command_.command_R + 1;
+      motor_command_.command_R++;
       if(motor_command_.command_R > 100) motor_command_.command_R = 100;
     }
 
     if(key_value == 97 | key_value == 65)
     {
-      motor_command_.command_R = motor_command_.command_R - 1;
+      motor_command_.command_R--;
       if(motor_command_.command_R < -100) motor_command_.command_R = -100;
     }
   }
@@ -294,7 +282,7 @@ void Motor_driver_tester::InputMotorCommand(int menu_number, int key_value)
   }
 }
 
-void Motor_driver_tester::ResetAtMotorCommand(int menu_number) // 현재 항목 리셋 함수
+void Motor_driver_tester::ResetAtCommand(int menu_number) // 현재 항목 리셋 함수
 {
 //----------------- command_L -----------------//
   if(menu_number == 0) motor_command_.command_L = 0;
@@ -308,8 +296,16 @@ void Motor_driver_tester::ResetAtMotorCommand(int menu_number) // 현재 항목 
 //----------------- Join -----------------//
   if(menu_number == 3) state_join_ = 0;
 
-//----------------- Join -----------------//
+//----------------- Encoder Reset -----------------//
   if(menu_number == 4) state_encoder_reset_ = 0;
+}
+
+void Motor_driver_tester::ResetAllCommand()
+{
+  for(int i=0;i<(maximum_menu_number_+1);i++)
+  {
+    ResetAtCommand(i);
+  }
 }
 
 int Motor_driver_tester::DoJoin()
@@ -392,8 +388,8 @@ int main(int argc, char **argv)
     motor_driver_tester.Spin();
     loop_rate.sleep();
     ros::spinOnce();
-
   }
+
   return 0;
 
 }
