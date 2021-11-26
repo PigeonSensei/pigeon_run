@@ -16,11 +16,11 @@ rosrun pigeon_run motor_driver_tester_node
 
 ### Published Topics
 
-- motor_command ([motor_driver_msgs/MotorCommand](https://github.com/PigeonSensei/pigeon_motor_driver/blob/master/motor_driver_msgs/msg/MotorCommand.msg))
+- **motor_command** ([motor_driver_msgs/MotorCommand](https://github.com/PigeonSensei/pigeon_motor_driver/blob/master/motor_driver_msgs/msg/MotorCommand.msg))
 
 ### Subscribed Topics
 
-- encoder_count ([encoder_msgs/EncoderCount](https://github.com/PigeonSensei/pigeon_encoder_driver/blob/master/encoder_msgs/msg/EncoderCount.msg))
+- **encoder_count** ([encoder_msgs/EncoderCount](https://github.com/PigeonSensei/pigeon_encoder_driver/blob/master/encoder_msgs/msg/EncoderCount.msg))
 
 
 ### Demo
@@ -29,11 +29,11 @@ rosrun pigeon_run motor_driver_tester_node
 
 ### Input Key
 
-select Item : W,S
+**select Item** : W,S
 
-Change value : A, S
+**Change value** : A, S
 
-at Reset value : X
+**at Reset value** : X
 
-all Reset value : Z
+**all Reset value** : Z
 
