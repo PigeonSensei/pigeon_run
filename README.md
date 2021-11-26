@@ -29,11 +29,11 @@ rosrun pigeon_run motor_driver_tester_node
 
 ### Input Key
 
-**select Item** : W,S
+- **select Item** : W,S
 
-**Change value** : A, S
+- **Change value** : A, S
 
-**at Reset value** : X
+- **at Reset value** : X
 
-**all Reset value** : Z
+- **all Reset value** : Z
 
